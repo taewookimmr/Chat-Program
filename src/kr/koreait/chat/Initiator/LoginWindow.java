@@ -32,6 +32,8 @@ public class LoginWindow extends JFrame implements ActionListener {
 		LoginWindow.loginMem = loginMem;
 	}
 	
+	// add comment
+	
 	JLabel idLabel;
 	JLabel pwLabel;
 	JLabel chatLabel;
