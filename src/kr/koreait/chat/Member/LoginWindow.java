@@ -1,4 +1,4 @@
-package kr.koreait.chat.Initiator;
+package org.whilescape.chat.Member;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Font;
@@ -15,10 +15,7 @@ import javax.swing.JLabel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
-import kr.koreait.chat.Main.MainWindow;
-import kr.koreait.chat.Member.MemberDAO;
-import kr.koreait.chat.Member.MemberVO;
-import kr.koreait.chat.Member.SignUpWindow;
+import org.whilescape.chat.Main.MainWindow;
 
 public class LoginWindow extends JFrame implements ActionListener {
 	
@@ -31,8 +28,6 @@ public class LoginWindow extends JFrame implements ActionListener {
 	public static void setLoginMem(MemberVO loginMem) {
 		LoginWindow.loginMem = loginMem;
 	}
-	
-	// add comment
 	
 	JLabel idLabel;
 	JLabel pwLabel;
@@ -137,10 +132,6 @@ public class LoginWindow extends JFrame implements ActionListener {
 	
 	}
 
-	public static void main(String[] args) {
-		LoginWindow window = new LoginWindow();
-	}
-
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		switch (e.getActionCommand()) {
@@ -165,15 +156,14 @@ public class LoginWindow extends JFrame implements ActionListener {
 		vo.setPw(pwField.getText().trim());
 		// 일단 로그인 시도 단계에서 현재 컴퓨터의 ip를 vo에 넣어서 MemberDAO.login(vo)로 로그인 시도를 해본다
 		String nowIp = null;
-		try {
-			nowIp = InetAddress.getLocalHost().getHostAddress();
+		try {nowIp = InetAddress.getLocalHost().getHostAddress();
 		} catch (UnknownHostException e) {e.printStackTrace();}
 		vo.setNowIp(nowIp);
 		
 		login_flag = MemberDAO.login(vo);
 		
-		// 로그인 성공
 		if(login_flag) {
+			// 로그인 성공
 			MemberVO mvo = MemberDAO.getMemberProfile(vo);
 			MainWindow mainWindow = new MainWindow(mvo);
 			MainWindow.view();
@@ -182,7 +172,6 @@ public class LoginWindow extends JFrame implements ActionListener {
 			
 		} else {
 			// 로그인 실패 
-			
 		}
 	}
 

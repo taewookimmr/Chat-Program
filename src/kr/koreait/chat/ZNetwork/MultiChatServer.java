@@ -1,4 +1,4 @@
-package kr.koreait.chat.ZNetwork;
+package org.whilescape.chat.ZNetwork;
 
 import java.io.PrintWriter;
 import java.net.ServerSocket;
@@ -9,9 +9,9 @@ import java.util.List;
 
 import javax.swing.JOptionPane;
 
-import kr.koreait.chat.Main.MainWindow;
-import kr.koreait.chat.Member.MemberVO;
-import kr.koreait.chat.Room.RoomVO;
+import org.whilescape.chat.Main.MainWindow;
+import org.whilescape.chat.Member.MemberVO;
+import org.whilescape.chat.Room.RoomVO;
 
 public class MultiChatServer {
 	public static int server_localport = 10000;
@@ -35,6 +35,7 @@ public class MultiChatServer {
 //				이것으로 그 클라이언트의 id정보를 얻어올 수 있을까? 디비에 nowip를 넣어서 해결하였다.
 				
 				MultiChatThread mct = new MultiChatThread(serverSocket, socket,  rvo, this.list, this.socketList, this.mvoList);
+				mct.setDaemon(true);
 				mct.start();
 				MainWindow.view();
 			}

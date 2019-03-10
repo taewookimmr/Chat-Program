@@ -1,7 +1,7 @@
-package kr.koreait.chat.ZNetwork;
+package org.whilescape.chat.ZNetwork;
 
-import kr.koreait.chat.Member.MemberVO;
-import kr.koreait.chat.Room.RoomVO;
+import org.whilescape.chat.Member.MemberVO;
+import org.whilescape.chat.Room.RoomVO;
 
 public class Thread_Ver_Server implements Runnable{
 	
@@ -15,6 +15,5 @@ public class Thread_Ver_Server implements Runnable{
 	public void run() {
 		MultiChatServer multiChatServer	= new MultiChatServer(rvo);
 	}
-
 
 }

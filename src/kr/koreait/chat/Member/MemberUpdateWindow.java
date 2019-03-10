@@ -1,4 +1,4 @@
-package kr.koreait.chat.Member;
+package org.whilescape.chat.Member;
 
 import java.awt.Color;
 import java.awt.Container;
@@ -26,10 +26,9 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 
-import kr.koreait.chat.Initiator.LoginWindow;
-import kr.koreait.chat.Main.MainWindow;
-import kr.koreait.chat.Member.MemberDAO;
-import kr.koreait.chat.Member.MemberVO;
+import org.whilescape.chat.Main.MainWindow;
+import org.whilescape.chat.Member.MemberDAO;
+import org.whilescape.chat.Member.MemberVO;
 
 public class MemberUpdateWindow extends JFrame implements ActionListener , ItemListener{
 	

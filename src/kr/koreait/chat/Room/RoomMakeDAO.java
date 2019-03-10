@@ -1,4 +1,4 @@
-package kr.koreait.chat.Room;
+package org.whilescape.chat.Room;
 
 import java.net.InetAddress;
 import java.sql.Connection;
@@ -9,10 +9,10 @@ import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
-import kr.koreait.chat.Initiator.LoginWindow;
-import kr.koreait.chat.Main.MainDAO;
-import kr.koreait.chat.Main.MainWindow;
-import kr.koreait.chat.Util.DBUtil;
+import org.whilescape.chat.Main.MainDAO;
+import org.whilescape.chat.Main.MainWindow;
+import org.whilescape.chat.Member.LoginWindow;
+import org.whilescape.chat.Util.DBUtil;
 
 public class RoomMakeDAO {
 	
@@ -145,7 +145,7 @@ public class RoomMakeDAO {
 		else 		{return false;	}
 	}
 
-	// 이건 디비와 관련된 것이다. 서버 쓰래드나, 클아이언트 쓰래드는 따로 꺼줘야한다
+	// 이건 디비와 관련된 것이다. 서버 쓰래드나, 클라이언트 쓰래드는 따로 꺼줘야한다
 	// 방장이 방을 나가면, chatroom 디비에서 해당 방 삭제, roommember 디비에서 해당 방에 해당하는 리스트? 다 삭제
 	// 일반인?이 방을 나가면, chatroom 디비에서 해당 방의 현 인원 수를 1 감소, roommember 디비에서
 	// (해당 방, 해당 아이디) 행?을 삭제 

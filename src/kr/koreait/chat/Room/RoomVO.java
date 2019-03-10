@@ -1,4 +1,4 @@
-package kr.koreait.chat.Room;
+package org.whilescape.chat.Room;
 
 public class RoomVO {
 	
@@ -69,7 +69,7 @@ public class RoomVO {
 	public int getServerLocalPort() {
 		return serverLocalPort;
 	}
-	public void serServerLocalPort(int serverLocalPort) {
+	public void setServerLocalPort(int serverLocalPort) {
 		this.serverLocalPort = serverLocalPort;
 	}
 	

@@ -1,4 +1,4 @@
-package kr.koreait.chat.ZNetwork;
+package org.whilescape.chat.ZNetwork;
 
 
 import java.io.BufferedReader;
@@ -14,11 +14,11 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.tree.ExpandVetoException;
 
-import kr.koreait.chat.Initiator.LoginWindow;
-import kr.koreait.chat.Main.MainWindow;
-import kr.koreait.chat.Member.MemberDAO;
-import kr.koreait.chat.Member.MemberVO;
-import kr.koreait.chat.Room.RoomVO;
+import org.whilescape.chat.Main.MainWindow;
+import org.whilescape.chat.Member.LoginWindow;
+import org.whilescape.chat.Member.MemberDAO;
+import org.whilescape.chat.Member.MemberVO;
+import org.whilescape.chat.Room.RoomVO;
 
 public class MultiChatThread extends Thread{
 
@@ -68,17 +68,15 @@ public class MultiChatThread extends Thread{
 			
 			for(PrintWriter pw : pwList) {
 				String str = "";
-				str += "##########";
 				str +="["+ mvo_me.getId()+ "]님이 방에 입장하였습니다.";
-				str += "##########\n";
 				pw.write(str + "\n");
 				pw.flush();
 		    }
 			
 			while(true) {
-//				String str = reader.readLine().trim();
 				StringBuffer str = new StringBuffer();
 				str.append(reader.readLine().trim());
+				
 				if(str == null) {break;}
 				if(str.length() > 0) {
 					for(PrintWriter writer : pwList) {

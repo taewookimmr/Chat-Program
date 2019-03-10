@@ -1,4 +1,4 @@
-package kr.koreait.chat.Main;
+package org.whilescape.chat.Main;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -7,8 +7,8 @@ import java.sql.SQLException;
 
 import javax.swing.JOptionPane;
 
-import kr.koreait.chat.Room.RoomVO;
-import kr.koreait.chat.Util.DBUtil;
+import org.whilescape.chat.Room.RoomVO;
+import org.whilescape.chat.Util.DBUtil;
 
 public class MainDAO {
 	
@@ -31,7 +31,7 @@ public class MainDAO {
 			rvo.setMaxmem(rs.getString("maxmem"));
 			rvo.setRoompw(rs.getString("roompw"));	
 			rvo.setServerip(rs.getString("serverip"));
-			rvo.serServerLocalPort(rs.getInt("serverlocalport"));
+			rvo.setServerLocalPort(rs.getInt("serverlocalport"));
 			
 			DBUtil.close(conn);
 			DBUtil.close(pstmt);

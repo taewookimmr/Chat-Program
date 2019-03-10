@@ -1,4 +1,4 @@
-package kr.koreait.chat.Util;
+package org.whilescape.chat.Util;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

@@ -1,4 +1,4 @@
-package kr.koreait.chat.Member;
+package org.whilescape.chat.Member;
 
 import java.awt.Color;
 import java.awt.Container;

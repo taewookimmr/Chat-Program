@@ -1,4 +1,4 @@
-package kr.koreait.chat.Member;
+package org.whilescape.chat.Member;
 
 import java.net.InetAddress;
 import java.net.Socket;
@@ -14,8 +14,7 @@ import java.util.Map;
 
 import javax.swing.JOptionPane;
 
-import kr.koreait.chat.Initiator.LoginWindow;
-import kr.koreait.chat.Util.DBUtil;
+import org.whilescape.chat.Util.DBUtil;
 
 public class MemberDAO {
 	

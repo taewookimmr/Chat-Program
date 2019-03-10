@@ -1,4 +1,4 @@
-package kr.koreait.chat.Room;
+package org.whilescape.chat.Room;
 
 import java.awt.BorderLayout;
 import java.awt.Choice;
@@ -38,13 +38,12 @@ import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 
-import kr.koreait.chat.Initiator.LoginWindow;
-import kr.koreait.chat.Main.MainWindow;
-import kr.koreait.chat.Member.MemberVO;
-import kr.koreait.chat.Util.DBUtil;
-import kr.koreait.chat.ZNetwork.ChattingRoomWindow;
-import kr.koreait.chat.ZNetwork.MultiChatClient;
-import kr.koreait.chat.ZNetwork.Thread_Ver_Server;
+import org.whilescape.chat.Main.MainWindow;
+import org.whilescape.chat.Member.LoginWindow;
+import org.whilescape.chat.Member.MemberVO;
+import org.whilescape.chat.Util.DBUtil;
+import org.whilescape.chat.ZNetwork.MultiChatClient;
+import org.whilescape.chat.ZNetwork.Thread_Ver_Server;
 
 
 

@@ -1,4 +1,4 @@
-package kr.koreait.chat.Main;
+package org.whilescape.chat.Room;
 
 import java.awt.Color;
 import java.awt.Container;
@@ -16,9 +16,10 @@ import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.border.LineBorder;
 
-import kr.koreait.chat.Initiator.LoginWindow;
-import kr.koreait.chat.Room.RoomVO;
-import kr.koreait.chat.ZNetwork.MultiChatClient;
+import org.whilescape.chat.Main.MainDAO;
+import org.whilescape.chat.Main.MainWindow;
+import org.whilescape.chat.Member.LoginWindow;
+import org.whilescape.chat.ZNetwork.MultiChatClient;
 
 public class PasswordWindow extends JFrame implements ActionListener{
 	

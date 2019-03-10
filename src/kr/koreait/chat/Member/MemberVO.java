@@ -1,4 +1,4 @@
-package kr.koreait.chat.Member;
+package org.whilescape.chat.Member;
 
 public class MemberVO {
 	private String id;

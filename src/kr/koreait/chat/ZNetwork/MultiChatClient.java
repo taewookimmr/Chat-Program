@@ -1,10 +1,8 @@
-package kr.koreait.chat.ZNetwork;
+package org.whilescape.chat.ZNetwork;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -24,30 +22,23 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
-import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollBar;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.table.TableModel;
-import javax.swing.table.TableRowSorter;
 
-import kr.koreait.chat.Main.MainDAO;
-import kr.koreait.chat.Main.MainWindow;
-import kr.koreait.chat.Member.MemberDAO;
-import kr.koreait.chat.Member.MemberVO;
-import kr.koreait.chat.Room.RoomMakeDAO;
-import kr.koreait.chat.Room.RoomMakeWindow;
-import kr.koreait.chat.Room.RoomVO;
-import kr.koreait.chat.Util.DBUtil;
+import org.whilescape.chat.Component.BalloonPanel;
+import org.whilescape.chat.Main.MainDAO;
+import org.whilescape.chat.Main.MainWindow;
+import org.whilescape.chat.Member.MemberDAO;
+import org.whilescape.chat.Member.MemberVO;
+import org.whilescape.chat.Room.ChattingRoomWindow;
+import org.whilescape.chat.Room.RoomMakeDAO;
+import org.whilescape.chat.Room.RoomUpdateWindow;
+import org.whilescape.chat.Room.RoomVO;
+import org.whilescape.chat.Util.DBUtil;
 
 public class MultiChatClient implements ActionListener, Runnable{
 
     public ChattingRoomWindow window;
-    public JScrollBar sb;
+
     
 	public Socket socket;
 	public Scanner sc;
@@ -79,23 +70,38 @@ public class MultiChatClient implements ActionListener, Runnable{
 
 		window.setTitle(rvo.getRoomname());
 		window.roomName_label.setText(str);
-		sb = window.conversation_scrollPane.getVerticalScrollBar();
-		
+	
 		window.setVisible(false); // 방 접속 허용되면 보여주자
 	}
 
 	public void backEnd() {
 
-		window.message_textfield.addActionListener(this);
 		window.message_send_button.addActionListener(this);
-		window.exit_button.addActionListener(this);
-		window.addWindowListener(new WindowAdapter() {
-			@Override
-			public void windowClosing(WindowEvent ev) {
-				roomOutProcess();
-			}
+		window.exit_button.		   addActionListener(this);
 
+		window.setting_button.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+											
+				if(window.mvo.getId().equals(rvo.getId())) {		// MemberVO ID와 RoomVO ID가 일치하면 방장
+//				방장인 경우에만 설정 창이 실행된다.
+					if(RoomUpdateWindow.isWindowCreated == false) {
+						RoomUpdateWindow roomUpdateWindow = new RoomUpdateWindow(rvo);
+						RoomUpdateWindow.isWindowCreated = true;
+//						roomUpdateWindow.setLocation(this.getLocation().x-roomUpdateWindow.getWidth(), this.getLocation().y);
+					}
+					else {
+						JOptionPane.showMessageDialog(null, "이미 만들어진 윈도우", "이미창", JOptionPane.WARNING_MESSAGE);
+					}	
+				}else {
+//				방장이 아닌 경우 설정 창 실행 불가
+					JOptionPane.showMessageDialog(null, "권한이 없습니다.", "수정불가", JOptionPane.WARNING_MESSAGE);
+					
+				}
+				
+			}
 		});
+		
 		window.message_textfield.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {				
@@ -110,30 +116,41 @@ public class MultiChatClient implements ActionListener, Runnable{
 			@Override
 			public void mouseWheelMoved(MouseWheelEvent e) {
 
-				Font   presentFont 		= window.conversation_textArea.getFont();
-				String presentFontName 	= presentFont.getFontName();
-				int    presentFontSize 	= presentFont.getSize();
-				int    presentFontStyle = presentFont.getStyle();
-				
-				switch(e.getWheelRotation()) {
-				
-				case 1  :  
-					if(presentFontSize > 10) presentFontSize -= 1; 
-					window.conversation_textArea.setFont(new Font(presentFontName, presentFontStyle, presentFontSize));
-				break;
-				
-				
-				case -1 :  
-					if(presentFontSize < 100) presentFontSize += 1; 
-					window.conversation_textArea.setFont(new Font(presentFontName, presentFontStyle, presentFontSize));
-				break;
-				
+				if(window.conversation_style == window.BASIC) {
+					Font   presentFont 		= window.conversation_textArea.getFont();
+					String presentFontName 	= presentFont.getFontName();
+					int    presentFontSize 	= presentFont.getSize();
+					int    presentFontStyle = presentFont.getStyle();
+					
+					switch(e.getWheelRotation()) {
+					
+					case 1  :  
+						if(presentFontSize > 10) presentFontSize -= 1; 
+						window.conversation_textArea.setFont(new Font(presentFontName, presentFontStyle, presentFontSize));
+					break;
+					
+					
+					case -1 :  
+						if(presentFontSize < 100) presentFontSize += 1; 
+						window.conversation_textArea.setFont(new Font(presentFontName, presentFontStyle, presentFontSize));
+					break;
+					
+					}
 				}
-				
 			
 			}
 		});
 		
+		window.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent ev) {
+				roomOutProcess();
+			}
+
+		});
+	
+	
+	
 	}
 	
 	public void accessTrial_threadStart() {
@@ -146,14 +163,34 @@ public class MultiChatClient implements ActionListener, Runnable{
 			    msg = rvo.getServerip() +"서버 "+ rvo.getServerLocalPort() +"번 포트로 접속 시도\n";
 				msg += socket + " 접속 성공\n";
 			
-				window.conversation_textArea.setText(msg);
-				window.message_textfield.requestFocus();
+				switch(window.conversation_style) {
+					case  ChattingRoomWindow.BASIC:
+						window.conversation_textArea.setText(msg);
+						window.message_textfield.requestFocus();
+						window.scrollBar.setValue(window.scrollBar.getMaximum());	
+					break;
+					
+					case  ChattingRoomWindow.KAKAO:
+						
+						Font font = new Font("배달의민족 도현", Font.PLAIN, 15);
+						Color bgColor = Color.ORANGE;
+						BalloonPanel panel = new BalloonPanel(msg, font, bgColor, window.conversation_inner_panel.getWidth());
+						panel.setLocation(10, window.bottom_line);
+						window.bottom_line +=  panel.getHeight() + window.interval_m;
+						
+						window.conversation_inner_panel.add(panel);		
+						window.balloons.add(panel);
+						window.scrollBar.setValue(window.scrollBar.getMaximum());	
+						
+					break;
+				}
+		
 	
 				sc = new Scanner(socket.getInputStream());
 				pw = new PrintWriter(socket.getOutputStream());
 				
-				// 여기 중요하지, 굳이 데몬 쓰레드로 설정 안 해도 메인 윈도우가 꺼지면 채팅 윈도우도 꺼지네? 오케이
 				Thread thread = new Thread(this);
+				thread.setDaemon(true);
 				thread.start();
 			
 			} catch (IOException ex) {
@@ -186,21 +223,76 @@ public class MultiChatClient implements ActionListener, Runnable{
 	
 			while(true) {
 	
-//				String str = sc.nextLine().trim();		
 				StringBuffer str = new StringBuffer();
 				str.append(sc.nextLine().trim());
 
 				if(str.length() != 0) {
-					msg += str + "\n\n";
-					window.conversation_textArea.setText(msg);
-					int value = sb.getMaximum();			
-					sb.setValue(value);	// 화면 넘치면 스크롤 자동 아래고정
 					
-					//		추가
+					msg += str + "\n\n";
+					switch(window.conversation_style) {
+					
+					case ChattingRoomWindow.BASIC:
+						window.conversation_textArea.setText(msg);
+						window.scrollBar.setValue(window.scrollBar.getMaximum());	
+					break;
+						
+					case ChattingRoomWindow.KAKAO:
+						
+						window.conversation_inner_panel.repaint();
+					
+						
+						String temp = str.toString();
+						
+						int start = temp.indexOf("[");
+						int end = temp.indexOf("]");
+						
+						String id   = temp.substring(start+1, end);
+						String text = temp.substring(end+1, temp.length());
+						
+						Font font = new Font("배달의민족 도현", Font.PLAIN, 10);
+						Color bgColor = Color.YELLOW;
+						BalloonPanel iPanel = new BalloonPanel(id, font, bgColor, window.conversation_inner_panel.getWidth());
+						iPanel.setLocation(10, window.bottom_line);
+						window.bottom_line +=  iPanel.getHeight() + window.interval_s;
+						window.conversation_inner_panel.setPreferredSize(new Dimension(
+								window.conversation_inner_panel.getWidth(), 
+								window.bottom_line  + window.interval_m*2)
+						);
+						window.conversation_inner_panel.add(iPanel);
+						window.conversation_inner_panel.repaint();
+						
+						try {Thread.sleep(10);} catch (InterruptedException e) {e.printStackTrace();}
+			
+						
+						font = new Font("배달의민족 도현", Font.PLAIN, 15);
+						bgColor = Color.ORANGE;
+						BalloonPanel bPanel = new BalloonPanel(text, font, bgColor, window.conversation_inner_panel.getWidth());
+						bPanel.setLocation(10, window.bottom_line);
+						window.bottom_line +=  bPanel.getHeight() + window.interval_m;
+						window.conversation_inner_panel.setPreferredSize(new Dimension(
+								window.conversation_inner_panel.getWidth(), 
+								window.bottom_line  + window.interval_m*2)
+						);
+						window.conversation_inner_panel.add(bPanel);
+						window.conversation_inner_panel.repaint();
+						
+						try {Thread.sleep(10);} catch (InterruptedException e) {e.printStackTrace();}
+				
+						
+						window.balloons.add(bPanel);
+											
+						window.scrollBar.setValue(window.scrollBar.getMaximum());
+						window.conversation_inner_panel.repaint();
+						
+				
+					break;
+					}
+		
+					// 방 제목 변경된 것 반영되도록 하는 부분
 					RoomVO new_rvo = MainDAO.selectByRoomnumber(rvo.getRoomnumber());
 					String title = "";
 					title += "[방 제목 : " + new_rvo.getRoomname() + "]";
-					title += "  [채널 : " + new_rvo.getChannel()+ "]";
+					title += "[채널 : " + new_rvo.getChannel()+ "]";
 					window.setTitle(new_rvo.getRoomname());
 					window.roomName_label.setText(title);
 					
@@ -214,33 +306,26 @@ public class MultiChatClient implements ActionListener, Runnable{
 //			본인 퇴장 시 : 위 try 내부의 String str = sc.nextLine().trim(); 에서 Scanner closed 예외
 //			방장 퇴장 시 : 위 try 내부의 String str = sc.nextLine().trim(); 에서 No line found  예외
 //			그럼 본인이 방장으로서 퇴장 시? : 방장 퇴장 시의 오류가 같은 위치에서 뜸.
-		} finally {
 			
 			boolean condition1 = socket.isClosed();
 			boolean condition2 = (socket == null);
 			
 			if(condition1 || condition2) {
-				
 				// 오히려 여기가 본인이 나가는 곳이네, 그렇지 roomoutProcess 메서드에서 자기 socket을 꺼버린다!
 				// 그렇다면 MCT 쪽의 couple socket은 그쪽 socketList에서 remove 제대로 되나 확인해야한다.
 				// condition1은 true, condition2는 false
-				
 				JOptionPane.showMessageDialog(null, "본인이 퇴장합니다.");
-				window.dispose();
-				MainWindow.view(); // 이미 윈도우는 꺼져있지만 확인 차원에서
-				
+	
 			} else {
-				
 				// 방장 퇴장하면서 실행되는 mct의 lists_renewal에서 참여자와 연결된 소켓(MCT쪽)을 다 close()해도
-				// condition1은 true, condition2는 false
+				// condition1은 false, condition2는 false
 				// 이렇게 생각하면된다. MCT 쪽의 couple socket이 꺼져도 여기 socket은 안 꺼지지만
 				// try 내부 String str = sc.nextLine().trim();에서 no line found 예외가 발생하여 여기로 오게 된다.
-				
 				JOptionPane.showMessageDialog(null, "방장이 퇴장하였습니다." );
-				window.dispose();
-				MainWindow.view();
-				
 			}
+		} finally {
+			window.dispose();
+			MainWindow.view(); 
 		}
 
 	}
@@ -250,10 +335,9 @@ public class MultiChatClient implements ActionListener, Runnable{
 		
 		if(str.length() > 0 ) {
 			if(pw != null) {
-				pw.write("["+ mvo_me.getId()+ "] >>> " +str + "\n");
-				pw.flush();
-				int value = sb.getMaximum();			
-				sb.setValue(value);	// 화면 넘치면 스크롤 자동 아래고정
+				pw.write("["+ mvo_me.getId()+ "]" +str + "\n");
+				pw.flush();	
+				window.scrollBar.setValue(window.scrollBar.getMaximum());	// 화면 넘치면 스크롤 자동 아래고정
 			}
 		}
 		
@@ -284,7 +368,6 @@ public class MultiChatClient implements ActionListener, Runnable{
 		window.dispose(); 	
 	}
 
-	// 유재욱 조장님.userListSelect의 이름을 바꾸고 내부를 수정함. 이건 static 아님
 	private void renewal_participantList_in_yourChattingWindow(int roomnumber) {
 		ArrayList<String> userList = new ArrayList<>();
 		

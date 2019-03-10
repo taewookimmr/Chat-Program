@@ -1,4 +1,4 @@
-package kr.koreait.chat.Room;
+package org.whilescape.chat.Room;
 
 import java.awt.Choice;
 import java.awt.Color;
@@ -27,41 +27,41 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 
-import kr.koreait.chat.Initiator.LoginWindow;
-import kr.koreait.chat.Main.MainWindow;
-import kr.koreait.chat.Member.MemberVO;
-import kr.koreait.chat.ZNetwork.MultiChatClient;
-import kr.koreait.chat.ZNetwork.MultiChatServer;
-import kr.koreait.chat.ZNetwork.Thread_Ver_Server;
+import org.whilescape.chat.Main.MainWindow;
+import org.whilescape.chat.Member.LoginWindow;
+import org.whilescape.chat.Member.MemberVO;
+import org.whilescape.chat.ZNetwork.MultiChatClient;
+import org.whilescape.chat.ZNetwork.MultiChatServer;
+import org.whilescape.chat.ZNetwork.Thread_Ver_Server;
 
 
 public class RoomMakeWindow extends JFrame implements ItemListener, ActionListener{
 	
 	public static boolean isWindowCreated = false;
 	
-	JLabel channelLabel;
-	JLabel roomNameLabel;
-	JLabel maxMemLabel;
-	JLabel privateLabel;
+	public JLabel channelLabel;
+	public JLabel roomNameLabel;
+	public JLabel maxMemLabel;
+	public JLabel privateLabel;
 	
-	Choice channelCombo;
-	Choice maxMemCombo;
+	public Choice channelCombo;
+	public Choice maxMemCombo;
 	
-	JPanel channelPanel  = new JPanel(new GridLayout(1, 2));
-	JPanel roomNamePanel = new JPanel(new GridLayout(1, 2));
-	JPanel maxMemPanel   = new JPanel(new GridLayout(1, 2));
-	JPanel privatePanel  = new JPanel(new GridLayout(1, 2));
+	public JPanel channelPanel  = new JPanel(new GridLayout(1, 2));
+	public JPanel roomNamePanel = new JPanel(new GridLayout(1, 2));
+	public JPanel maxMemPanel   = new JPanel(new GridLayout(1, 2));
+	public JPanel privatePanel  = new JPanel(new GridLayout(1, 2));
 	
-	JTextField roomNameField;
+	public JTextField roomNameField;
 	public static JPasswordField roomPwField; // 이건 왜 static 이죠!
-	RoomVO rvo = new RoomVO();
+	public RoomVO rvo = new RoomVO();
 	
-	JRadioButton yBtn, nBtn;
-	ButtonGroup btnGroup;
+	public JRadioButton yBtn, nBtn;
+	public ButtonGroup btnGroup;
 	public static String privateChoice;       // 이건 왜 static 이죠!
 	
-	JButton cancelButton;
-	JButton okButton;
+	public JButton cancelButton;
+	public JButton okButton;
 	
 	public RoomMakeWindow() {
 		
@@ -187,10 +187,6 @@ public class RoomMakeWindow extends JFrame implements ItemListener, ActionListen
 		setVisible(true);
 	}
 	
-	public static void main(String[] args) {
-		 RoomMakeWindow w = new RoomMakeWindow();
-	}
-	
 	public void backEnd() {
 		yBtn.addItemListener(this);
 		nBtn.addItemListener(this);
@@ -214,9 +210,8 @@ public class RoomMakeWindow extends JFrame implements ItemListener, ActionListen
 				
 				try   {rvo.setServerip(InetAddress.getLocalHost().getHostAddress());} 
 				catch (Exception e2) {e2.printStackTrace();}				
-				rvo.serServerLocalPort(MultiChatServer.server_localport++);
+				rvo.setServerLocalPort(MultiChatServer.server_localport++);
 		
-				Thread_Ver_Server tvs = new Thread_Ver_Server(rvo);
 
 				if (RoomMakeDAO.chat_insert(rvo)) {
 //					방번호가 만들어졌으면 갖고 와야지
@@ -229,7 +224,9 @@ public class RoomMakeWindow extends JFrame implements ItemListener, ActionListen
 					MainWindow.view();
 
 //					방만들기 조건이 충족되었다면 서버 쓰레드를 돌린다.
+					Thread_Ver_Server tvs = new Thread_Ver_Server(rvo);
 					Thread serverThread = new Thread(tvs);
+					serverThread.setDaemon(true);
 					serverThread.start();
 
 //					방장이 셀프클라이언트로서 참석한다

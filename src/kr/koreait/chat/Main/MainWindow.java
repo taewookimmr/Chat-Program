@@ -1,4 +1,4 @@
-package kr.koreait.chat.Main;
+package org.whilescape.chat.Main;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -32,14 +32,15 @@ import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
-import kr.koreait.chat.Initiator.LoginWindow;
-import kr.koreait.chat.Member.MemberDAO;
-import kr.koreait.chat.Member.MemberUpdateWindow;
-import kr.koreait.chat.Member.MemberVO;
-import kr.koreait.chat.Room.RoomMakeDAO;
-import kr.koreait.chat.Room.RoomMakeWindow;
-import kr.koreait.chat.Room.RoomVO;
-import kr.koreait.chat.ZNetwork.MultiChatClient;
+import org.whilescape.chat.Member.LoginWindow;
+import org.whilescape.chat.Member.MemberDAO;
+import org.whilescape.chat.Member.MemberUpdateWindow;
+import org.whilescape.chat.Member.MemberVO;
+import org.whilescape.chat.Room.PasswordWindow;
+import org.whilescape.chat.Room.RoomMakeDAO;
+import org.whilescape.chat.Room.RoomMakeWindow;
+import org.whilescape.chat.Room.RoomVO;
+import org.whilescape.chat.ZNetwork.MultiChatClient;
 
 public class MainWindow extends JFrame implements ActionListener{
 	
@@ -57,14 +58,14 @@ public class MainWindow extends JFrame implements ActionListener{
 	public JLabel pwLabel;
 	public JLabel ageLabel;
 	public JLabel genderLabel;
-	public List    multiList;
+	public List   multiList;
 
 	public Image manImage[] = new Image[5];
 	public Image womanImage[] = new Image[5];
 
-	static MemberVO mvo = new MemberVO();
+	public static MemberVO mvo = new MemberVO();
 	public static String columnNames[] = {"방 번호", "방 제목", "방장","채널", "인원", "공개여부"};
-	static DefaultTableModel model = new DefaultTableModel(columnNames, 0) {
+	public static DefaultTableModel model = new DefaultTableModel(columnNames, 0) {
 		
 		@Override
 		public boolean isCellEditable(int row, int column) {				// table 내용 수정 불가
@@ -203,8 +204,8 @@ public class MainWindow extends JFrame implements ActionListener{
 		man = new JButton();
 		woman = new JButton();
 		for(int i = 0; i<manImage.length; i++) {
-			manImage[i] = Toolkit.getDefaultToolkit().getImage(String.format("./src/image/man%d.png", i));
-			womanImage[i] = Toolkit.getDefaultToolkit().getImage(String.format("./src/image/woman%d.png", i));			
+			manImage[i] = Toolkit.getDefaultToolkit().getImage(String.format("./src/images/man%d.png", i));
+			womanImage[i] = Toolkit.getDefaultToolkit().getImage(String.format("./src/images/woman%d.png", i));			
 		}
 		if(mvo.getGender().equals("여")) {
 			woman = new JButton(new ImageIcon(womanImage[new Random().nextInt(womanImage.length)]));
@@ -374,7 +375,7 @@ public class MainWindow extends JFrame implements ActionListener{
 				}
 			}
 			
-			// 아래 빨간버튼 눌렀을 시(메인 쓰레드 강제 종료?)에도 로그아웃 되는 효과를 주려면 nowip를 공백으로 처리해야한다.
+			// 콘솔창의 빨간버튼 눌렀을 시(메인 쓰레드 강제 종료?)에도 로그아웃 되는 효과를 주려면 nowip를 공백으로 처리해야한다.
 			// 이 부분은 아직 구현 못했다.
 		
 		});
@@ -417,7 +418,7 @@ public class MainWindow extends JFrame implements ActionListener{
 
 	private void choice() {
 		
-		ArrayList<kr.koreait.chat.Room.RoomVO> list = RoomMakeDAO.select();
+		ArrayList<org.whilescape.chat.Room.RoomVO> list = RoomMakeDAO.select();
 	
 		for(int i = model.getRowCount() - 1; i >= 0; i--) {
 			model.removeRow(i);
@@ -426,7 +427,7 @@ public class MainWindow extends JFrame implements ActionListener{
 		if(list.size() != 0) {
 			String rowData[] = new String[6];
 			
-			for(kr.koreait.chat.Room.RoomVO data : list) {
+			for(org.whilescape.chat.Room.RoomVO data : list) {
 				if(data.getChannel().equals(multiList.getSelectedItem())) {
 					rowData[0] = data.getRoomnumber()+"";
 					rowData[1] = data.getRoomname();
@@ -445,7 +446,7 @@ public class MainWindow extends JFrame implements ActionListener{
 	}
 	
 	public static void view() {
-		ArrayList<kr.koreait.chat.Room.RoomVO> list = RoomMakeDAO.select();
+		ArrayList<org.whilescape.chat.Room.RoomVO> list = RoomMakeDAO.select();
 	
 		for(int i = model.getRowCount() - 1; i >= 0; i--) {
 			model.removeRow(i);
@@ -454,7 +455,7 @@ public class MainWindow extends JFrame implements ActionListener{
 		if(list.size() != 0) {
 	
 			String rowData[] = new String[6];
-			for(kr.koreait.chat.Room.RoomVO data : list) {
+			for(org.whilescape.chat.Room.RoomVO data : list) {
 				rowData[0] = data.getRoomnumber()+"";
 				rowData[1] = data.getRoomname();
 				rowData[2] = data.getId();
@@ -490,6 +491,7 @@ public class MainWindow extends JFrame implements ActionListener{
 				RoomMakeWindow roomMakeWindow = new RoomMakeWindow();
 				RoomMakeWindow.isWindowCreated = true;
 				roomMakeWindow.setLocation(this.getLocation().x-roomMakeWindow.getWidth(), this.getLocation().y);
+
 			}
 			else {
 				JOptionPane.showMessageDialog(null, "이미 만들어진 윈도우", "이미창", JOptionPane.WARNING_MESSAGE);
