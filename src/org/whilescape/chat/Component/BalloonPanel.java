@@ -15,6 +15,10 @@ import javax.swing.JTextArea;
 import javax.swing.border.LineBorder;
 import javax.swing.plaf.basic.BasicLabelUI;
 
+// 카톡과 같은 채팅 프로그램과 같이 말풍선으로 대화를 보여주기 위한 클래스
+// 특징
+// JPanel을 상속
+
 public class BalloonPanel extends JPanel{
 
 	public int innerRectangle_width;
