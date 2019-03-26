@@ -10,9 +10,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
+import javax.accessibility.AccessibleContext;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -87,7 +89,7 @@ public class LoginWindow extends JFrame implements ActionListener {
 		int x=55;
 		int y=100;
 	
-		chatLabel = new JLabel("LOGIN");
+		chatLabel = new JLabel("Sign In");
 		chatLabel.setFont(new Font(Resource.mainFontType, Font.PLAIN, 60));
 		chatLabel.setForeground(main_text_color);
 		chatLabel.setHorizontalAlignment(JLabel.CENTER);
@@ -209,8 +211,13 @@ public class LoginWindow extends JFrame implements ActionListener {
 		}
 	}
 
+	
+	
 
 	public static void main(String[] args) {
 		LoginWindow loginWindow = new LoginWindow();
 	}
+	
+
+
 }

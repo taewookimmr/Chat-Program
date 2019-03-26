@@ -69,6 +69,9 @@ public class MainWindow extends JFrame implements ActionListener{
 		}
 	};
 	
+	
+	
+	
     public static JTable table = new JTable(model);
     
     
@@ -349,8 +352,7 @@ public class MainWindow extends JFrame implements ActionListener{
 		}
 	}
     
-    
-  
+   
 	// 백엔드
 	public void backEnd() {
 		
@@ -370,8 +372,9 @@ public class MainWindow extends JFrame implements ActionListener{
 					RoomDAO.myRoomDelete(mvo.getId());
 					System.exit(0);
 				} else {
+					// 채팅 프로그램을 종료하지 않는다면 여기로 넘어와서 wait를 실행한다.
 					try {
-						e.wait();
+						e.wait(); 
 					} catch (InterruptedException e1) {
 						e1.printStackTrace();
 					}
@@ -416,18 +419,24 @@ public class MainWindow extends JFrame implements ActionListener{
 		});
 	}
 
-	public static void view() { 
-
-		ArrayList<org.whilescape.chat.DTO.RoomVO> list = RoomDAO.select();
 	
+	// 실시간을 생성되는 채팅방 목록을 계속 갱신하는 역할을 하는 메서드
+	public static void view() { 
+		
+		
+		// 최신화된 채팅방 전체 목록을 받아 온다.
+		ArrayList<RoomVO> list = RoomDAO.select();
+	
+		// 일단 테이블에 있는 채팅방 목록을 다 제거한다.
 		for(int i = model.getRowCount() - 1; i >= 0; i--) {
 			model.removeRow(i);
 		}
 		
+		// 채팅방의 개수가 0보다 크다면 최신화된 채팅방 목록을 테이블에 보여준다.
 		if(list.size() != 0) {
 	
 			String rowData[] = new String[6];
-			for(org.whilescape.chat.DTO.RoomVO data : list) {
+			for(RoomVO data : list) {
 				rowData[0] = data.getRoomnumber()+"";
 				rowData[1] = data.getRoomname();
 				rowData[2] = data.getId();
@@ -437,10 +446,15 @@ public class MainWindow extends JFrame implements ActionListener{
 				model.addRow(rowData);
 			}			
 		} 
+		
+		// table에서 컬럼명을 클릭했을 때 데이터값을 오름차순, 내림차순으로 정렬하는 기능을 추가한다.
 		table.setAutoCreateRowSorter(true);
 		TableRowSorter<TableModel> tablesorter = new TableRowSorter<TableModel>(table.getModel());
 		table.setRowSorter(tablesorter);
+		
+
 	}
+
 	
 	private void channel_choice() {
 		

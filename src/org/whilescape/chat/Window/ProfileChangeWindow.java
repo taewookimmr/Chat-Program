@@ -197,8 +197,7 @@ public class ProfileChangeWindow extends JFrame implements ActionListener , Item
 	@Override
 	public void itemStateChanged(ItemEvent e) {		
 		
-		Object object = e.getSource();
-		JRadioButton radioButton = (JRadioButton) object;
+		JRadioButton radioButton = (JRadioButton) e.getSource();
 		
 		idUpdateChoice = radioButton.getText();
 		
@@ -215,6 +214,7 @@ public class ProfileChangeWindow extends JFrame implements ActionListener , Item
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		
 		MemberVO vo = new MemberVO();
 		String id, nowPw, newPw1, newPw2;
 		boolean pwFlag = true;
@@ -248,7 +248,7 @@ public class ProfileChangeWindow extends JFrame implements ActionListener , Item
 								vo.setId(id);
 								vo.setPw(newPw2);
 								if(MemberDAO.member_update_id_pw(vo)) {
-									// MainWindow.nameLabel.setText("ID : " + id);
+									MainWindow.nameLabel.setText("ID : " + id);
 									ProfileChangeWindow.isWindowCreated = false;
 									setVisible(false);
 									dispose();

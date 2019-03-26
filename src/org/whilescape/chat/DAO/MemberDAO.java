@@ -370,7 +370,7 @@ public class MemberDAO {
 						e.printStackTrace();
 					}
 			}
-			LoginWindow.setLoginMem(vo);	// 변경된 아이디로 LoginMem 변경 (계속 프로필수정해도 가능하도록)
+			LoginWindow.setLoginMem(vo);	// 변경된 아이디로 LoginMem 변경 계속 프로필수정해도 가능하도록)
 			return flag;
 		}
 		
