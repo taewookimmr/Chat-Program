@@ -1,0 +1,11 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - Initiator",
+            "request": "launch",
+            "mainClass": "org.whilescape.chat.AppStart.Initiator",
+            "projectName": "ChattingProject(10.25)"
+        }
+    ]
+}
