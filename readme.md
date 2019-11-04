@@ -1,2 +1,2 @@
 
-![portfolio](./image/Portfolio_chat.jpg)
+![portfolio](./image/Portfolio_chatting__.jpg)
